@@ -23,6 +23,10 @@
         </svg>
         <span>RedditoAuto</span>
       </div>
+      <nav class="header-nav">
+        <a href="#calcolatore" class="nav-link">Calcolatore</a>
+        <a href="#simulatore" class="nav-link">Simulatore</a>
+      </nav>
       <button class="theme-toggle" data-theme-toggle aria-label="Passa alla modalità scura">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
       </button>
@@ -33,112 +37,188 @@
     <section class="hero">
       <div class="container hero__inner">
         <h1 class="hero__title">Quanto ti costa davvero<br><span class="accent">quella macchina?</span></h1>
-        <p class="hero__sub">Inserisci i dettagli e scopri il reddito netto mensile minimo per permettertela senza stress.</p>
+        <p class="hero__sub">Calcola il reddito minimo necessario e simula il piano di finanziamento completo.</p>
       </div>
     </section>
 
-    <section class="calc-section">
-      <div class="container calc-section__grid">
+    <!-- ======================== CALCOLATORE ======================== -->
+    <section class="calc-section" id="calcolatore">
+      <div class="container">
+        <h2 class="section-title">Calcolatore reddito</h2>
+        <div class="calc-section__grid">
 
-        <!-- FORM -->
-        <div class="card form-card">
-          <h2 class="card__title">Dati del veicolo</h2>
+          <!-- FORM -->
+          <div class="card form-card">
+            <h3 class="card__title">Dati del veicolo</h3>
 
-          <div class="form-group">
-            <label for="prezzoAuto">Prezzo auto (€)</label>
-            <input type="number" id="prezzoAuto" placeholder="es. 25000" min="1000" step="500">
+            <div class="form-group">
+              <label for="prezzoAuto">Prezzo auto (€)</label>
+              <input type="number" id="prezzoAuto" placeholder="es. 25000" min="1000" step="500">
+            </div>
+
+            <div class="form-group">
+              <label for="anticipo">Anticipo (€)</label>
+              <input type="number" id="anticipo" placeholder="es. 5000" min="0" step="500">
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="durataMesi">Durata finanziamento</label>
+                <select id="durataMesi">
+                  <option value="12">12 mesi</option>
+                  <option value="24">24 mesi</option>
+                  <option value="36" selected>36 mesi</option>
+                  <option value="48">48 mesi</option>
+                  <option value="60">60 mesi</option>
+                  <option value="72">72 mesi</option>
+                  <option value="84">84 mesi</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="tasso">Tasso annuo (%)</label>
+                <input type="number" id="tasso" placeholder="es. 7.5" min="0" max="30" step="0.1">
+              </div>
+            </div>
+
+            <h3 class="card__title" style="margin-top:var(--space-8)">Costi mensili stimati</h3>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="kw">Potenza (kW)</label>
+                <input type="number" id="kw" placeholder="es. 90" min="1" step="1">
+                <span class="form-hint">Per stimare il bollo ACI</span>
+              </div>
+              <div class="form-group">
+                <label for="assicurazione">Assicurazione (€/anno)</label>
+                <input type="number" id="assicurazione" placeholder="es. 800" min="0" step="50">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="carburante">Carburante (€/mese)</label>
+                <input type="number" id="carburante" placeholder="es. 120" min="0" step="10">
+              </div>
+              <div class="form-group">
+                <label for="manutenzione">Manutenzione (€/mese)</label>
+                <input type="number" id="manutenzione" placeholder="es. 40" min="0" step="10">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="percentualeReddito">% max reddito per l’auto</label>
+              <div class="range-wrapper">
+                <input type="range" id="percentualeReddito" min="15" max="50" value="35" step="1">
+                <span class="range-value" id="percentualeLabel">35%</span>
+              </div>
+              <span class="form-hint">Regola del 35%: soglia consigliata dai consulenti finanziari</span>
+            </div>
+
+            <button class="btn btn-primary" id="btnCalcola">Calcola stipendio minimo</button>
+            <button class="btn btn-ghost" id="btnReset">Azzera</button>
           </div>
 
-          <div class="form-group">
-            <label for="anticipo">Anticipo (€)</label>
-            <input type="number" id="anticipo" placeholder="es. 5000" min="0" step="500">
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label for="durataMesi">Durata finanziamento</label>
-              <select id="durataMesi">
-                <option value="12">12 mesi</option>
-                <option value="24">24 mesi</option>
-                <option value="36" selected>36 mesi</option>
-                <option value="48">48 mesi</option>
-                <option value="60">60 mesi</option>
-                <option value="72">72 mesi</option>
-                <option value="84">84 mesi</option>
-              </select>
+          <!-- RISULTATI -->
+          <div class="results-panel" id="resultsPanel" aria-live="polite">
+            <div class="card result-main" id="cardStipendio">
+              <p class="result-label">Stipendio netto mensile minimo</p>
+              <p class="result-value" id="valStipendio">—</p>
+              <p class="result-sub" id="descStipendio">Inserisci i dati e calcola</p>
             </div>
-            <div class="form-group">
-              <label for="tasso">Tasso annuo (%)</label>
-              <input type="number" id="tasso" placeholder="es. 7.5" min="0" max="30" step="0.1">
-            </div>
-          </div>
 
-          <h2 class="card__title" style="margin-top: var(--space-8)">Costi mensili stimati</h2>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label for="kw">Potenza (kW)</label>
-              <input type="number" id="kw" placeholder="es. 90" min="1" step="1">
-              <span class="form-hint">Usata per stimare il bollo ACI</span>
+            <div class="card breakdown-card" id="cardBreakdown">
+              <h3 class="card__title">Breakdown costi mensili</h3>
+              <ul class="breakdown-list" id="breakdownList">
+                <li class="breakdown-item breakdown-placeholder">I dati appariranno dopo il calcolo</li>
+              </ul>
+              <div class="breakdown-total" id="breakdownTotal"></div>
             </div>
-            <div class="form-group">
-              <label for="assicurazione">Assicurazione (€/anno)</label>
-              <input type="number" id="assicurazione" placeholder="es. 800" min="0" step="50">
+
+            <div class="card verdict-card" id="cardVerdict">
+              <h3 class="card__title">Valutazione</h3>
+              <p class="verdict-text" id="verdictText">—</p>
             </div>
           </div>
 
-          <div class="form-row">
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================== SIMULATORE ======================== -->
+    <section class="sim-section" id="simulatore">
+      <div class="container">
+        <h2 class="section-title">Simulatore di finanziamento</h2>
+        <p class="section-sub">Analizza il piano di ammortamento completo e confronta diverse durate.</p>
+
+        <div class="sim-grid">
+
+          <!-- Form simulatore -->
+          <div class="card sim-form-card">
+            <h3 class="card__title">Parametri</h3>
+
             <div class="form-group">
-              <label for="carburante">Carburante (€/mese)</label>
-              <input type="number" id="carburante" placeholder="es. 120" min="0" step="10">
+              <label for="simCapitale">Importo da finanziare (€)</label>
+              <input type="number" id="simCapitale" placeholder="es. 20000" min="1000" step="500">
+              <span class="form-hint">Prezzo auto meno anticipo</span>
             </div>
+
             <div class="form-group">
-              <label for="manutenzione">Manutenzione (€/mese)</label>
-              <input type="number" id="manutenzione" placeholder="es. 40" min="0" step="10">
+              <label for="simTasso">Tasso annuo (%)</label>
+              <input type="number" id="simTasso" placeholder="es. 7.5" min="0" max="30" step="0.1">
             </div>
+
+            <div class="form-group">
+              <label>Durate da confrontare</label>
+              <div class="durate-check-group">
+                <label class="checkbox-label"><input type="checkbox" value="24" id="dur24"> 24 mesi</label>
+                <label class="checkbox-label"><input type="checkbox" value="36" id="dur36" checked> 36 mesi</label>
+                <label class="checkbox-label"><input type="checkbox" value="48" id="dur48" checked> 48 mesi</label>
+                <label class="checkbox-label"><input type="checkbox" value="60" id="dur60"> 60 mesi</label>
+                <label class="checkbox-label"><input type="checkbox" value="72" id="dur72"> 72 mesi</label>
+              </div>
+            </div>
+
+            <button class="btn btn-primary" id="btnSimula">Simula finanziamento</button>
           </div>
 
-          <div class="form-group">
-            <label for="percentualeReddito">% max reddito per l'auto</label>
-            <div class="range-wrapper">
-              <input type="range" id="percentualeReddito" min="15" max="50" value="35" step="1">
-              <span class="range-value" id="percentualeLabel">35%</span>
+          <!-- KPI summary -->
+          <div class="sim-kpi-panel" id="simKpiPanel">
+            <div class="sim-empty" id="simEmpty">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              <p>Inserisci capitale e tasso, poi clicca <strong>Simula</strong></p>
             </div>
-            <span class="form-hint">Regola del 35%: la soglia consigliata dai consulenti finanziari</span>
+            <div id="simKpiContent" class="hidden"></div>
           </div>
 
-          <button class="btn btn-primary" id="btnCalcola">
-            Calcola stipendio minimo
-          </button>
-          <button class="btn btn-ghost" id="btnReset">Azzera</button>
         </div>
 
-        <!-- RISULTATI -->
-        <div class="results-panel" id="resultsPanel" aria-live="polite">
-
-          <div class="card result-main" id="cardStipendio">
-            <p class="result-label">Stipendio netto mensile minimo</p>
-            <p class="result-value" id="valStipendio">—</p>
-            <p class="result-sub" id="descStipendio">Inserisci i dati e calcola</p>
+        <!-- Tabella piano ammortamento -->
+        <div class="card sim-table-card" id="simTableCard">
+          <div class="sim-table-header">
+            <h3 class="card__title" id="simTableTitle">Piano di ammortamento</h3>
+            <div class="sim-tab-group" id="simTabGroup"></div>
           </div>
-
-          <div class="card breakdown-card" id="cardBreakdown">
-            <h3 class="card__title">Breakdown costi mensili</h3>
-            <ul class="breakdown-list" id="breakdownList">
-              <li class="breakdown-item breakdown-placeholder">I dati appariranno dopo il calcolo</li>
-            </ul>
-            <div class="breakdown-total" id="breakdownTotal"></div>
+          <div class="table-scroll">
+            <table class="amort-table" id="amortTable">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Rata mensile</th>
+                  <th>Quota capitale</th>
+                  <th>Quota interessi</th>
+                  <th>Debito residuo</th>
+                </tr>
+              </thead>
+              <tbody id="amortBody">
+                <tr><td colspan="5" class="table-placeholder">Nessun dato da visualizzare</td></tr>
+              </tbody>
+            </table>
           </div>
-
-          <div class="card verdict-card" id="cardVerdict">
-            <h3 class="card__title">Valutazione</h3>
-            <p class="verdict-text" id="verdictText">—</p>
-          </div>
-
         </div>
 
       </div>
     </section>
+
   </main>
 
   <footer class="footer">
@@ -150,5 +230,6 @@
   <script src="js/calculator.js"></script>
   <script src="js/storage.js"></script>
   <script src="js/app.js"></script>
+  <script src="js/simulator.js"></script>
 </body>
 </html>
