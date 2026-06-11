@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RedditoAuto — Quanto mi costa davvero questa auto?</title>
+  <meta name="description" content="Calcola il reddito netto mensile minimo per permetterti l'auto che desideri. Rata, bollo, assicurazione e carburante in un colpo solo.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <a href="#main" class="skip-link">Vai al contenuto</a>
+
+  <header class="header">
+    <div class="container header__inner">
+      <div class="logo" aria-label="RedditoAuto">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <rect width="32" height="32" rx="8" fill="#2563eb"/>
+          <path d="M6 22l4-10h3l2.5 6.5L18 12h3l4 10h-3l-2.5-6.5L17 22h-2l-2.5-6.5L10 22H6z" fill="white"/>
+        </svg>
+        <span>RedditoAuto</span>
+      </div>
+      <button class="theme-toggle" data-theme-toggle aria-label="Passa alla modalità scura">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <div class="container hero__inner">
+        <h1 class="hero__title">Quanto ti costa davvero<br><span class="accent">quella macchina?</span></h1>
+        <p class="hero__sub">Inserisci i dettagli e scopri il reddito netto mensile minimo per permettertela senza stress.</p>
+      </div>
+    </section>
+
+    <section class="calc-section">
+      <div class="container calc-section__grid">
+
+        <!-- FORM -->
+        <div class="card form-card">
+          <h2 class="card__title">Dati del veicolo</h2>
+
+          <div class="form-group">
+            <label for="prezzoAuto">Prezzo auto (€)</label>
+            <input type="number" id="prezzoAuto" placeholder="es. 25000" min="1000" step="500">
+          </div>
+
+          <div class="form-group">
+            <label for="anticipo">Anticipo (€)</label>
+            <input type="number" id="anticipo" placeholder="es. 5000" min="0" step="500">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="durataMesi">Durata finanziamento</label>
+              <select id="durataMesi">
+                <option value="12">12 mesi</option>
+                <option value="24">24 mesi</option>
+                <option value="36" selected>36 mesi</option>
+                <option value="48">48 mesi</option>
+                <option value="60">60 mesi</option>
+                <option value="72">72 mesi</option>
+                <option value="84">84 mesi</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="tasso">Tasso annuo (%)</label>
+              <input type="number" id="tasso" placeholder="es. 7.5" min="0" max="30" step="0.1">
+            </div>
+          </div>
+
+          <h2 class="card__title" style="margin-top: var(--space-8)">Costi mensili stimati</h2>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="kw">Potenza (kW)</label>
+              <input type="number" id="kw" placeholder="es. 90" min="1" step="1">
+              <span class="form-hint">Usata per stimare il bollo ACI</span>
+            </div>
+            <div class="form-group">
+              <label for="assicurazione">Assicurazione (€/anno)</label>
+              <input type="number" id="assicurazione" placeholder="es. 800" min="0" step="50">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="carburante">Carburante (€/mese)</label>
+              <input type="number" id="carburante" placeholder="es. 120" min="0" step="10">
+            </div>
+            <div class="form-group">
+              <label for="manutenzione">Manutenzione (€/mese)</label>
+              <input type="number" id="manutenzione" placeholder="es. 40" min="0" step="10">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="percentualeReddito">% max reddito per l'auto</label>
+            <div class="range-wrapper">
+              <input type="range" id="percentualeReddito" min="15" max="50" value="35" step="1">
+              <span class="range-value" id="percentualeLabel">35%</span>
+            </div>
+            <span class="form-hint">Regola del 35%: la soglia consigliata dai consulenti finanziari</span>
+          </div>
+
+          <button class="btn btn-primary" id="btnCalcola">
+            Calcola stipendio minimo
+          </button>
+          <button class="btn btn-ghost" id="btnReset">Azzera</button>
+        </div>
+
+        <!-- RISULTATI -->
+        <div class="results-panel" id="resultsPanel" aria-live="polite">
+
+          <div class="card result-main" id="cardStipendio">
+            <p class="result-label">Stipendio netto mensile minimo</p>
+            <p class="result-value" id="valStipendio">—</p>
+            <p class="result-sub" id="descStipendio">Inserisci i dati e calcola</p>
+          </div>
+
+          <div class="card breakdown-card" id="cardBreakdown">
+            <h3 class="card__title">Breakdown costi mensili</h3>
+            <ul class="breakdown-list" id="breakdownList">
+              <li class="breakdown-item breakdown-placeholder">I dati appariranno dopo il calcolo</li>
+            </ul>
+            <div class="breakdown-total" id="breakdownTotal"></div>
+          </div>
+
+          <div class="card verdict-card" id="cardVerdict">
+            <h3 class="card__title">Valutazione</h3>
+            <p class="verdict-text" id="verdictText">—</p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>RedditoAuto &mdash; calcolatore orientativo, non consulenza finanziaria.</p>
+    </div>
+  </footer>
+
+  <script src="js/calculator.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
