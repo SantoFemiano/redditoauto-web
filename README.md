@@ -41,17 +41,6 @@ dove `C` = capitale, `r` = tasso mensile, `n` = numero rate
 Stipendio = Costo mensile totale / (% reddito / 100)
 ```
 
-## ▶️ Deploy su Netlify
-
-1. Fai il fork/clone di questa repo
-2. Vai su [netlify.com](https://netlify.com) → **Add new site → Import from Git**
-3. Seleziona questa repo
-4. Build command: **lascia vuoto**
-5. Publish directory: **`.`**
-6. Clicca **Deploy**
-
-Ogni push su `main` triggera automaticamente un nuovo deploy.
-
 ## 📝 Note
 
 I calcoli sono puramente orientativi e non costituiscono consulenza finanziaria.
